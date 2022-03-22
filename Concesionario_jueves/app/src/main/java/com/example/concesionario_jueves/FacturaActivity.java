@@ -1,0 +1,133 @@
+package com.example.concesionario_jueves;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class FacturaActivity extends AppCompatActivity {
+    EditText codigo, fecha, identificacion, placa;
+    Button guardar, consultar, anular, cancelar, regresar;
+    long resp, sw;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_factura);
+        codigo = findViewById(R.id.etcodigo);
+        fecha = findViewById(R.id.etfecha);
+        identificacion = findViewById(R.id.etidentificacion);
+        placa = findViewById(R.id.etplaca);
+        guardar = findViewById(R.id.btguardar);
+        consultar = findViewById(R.id.btconsultar);
+        cancelar = findViewById(R.id.btcancelar);
+        anular = findViewById(R.id.btanular);
+        regresar = findViewById(R.id.btregresar);
+    }
+
+    public void guardar(View view) {
+        String scodigo, sfecha, sidentificacion, splaca;
+        scodigo = codigo.getText().toString();
+        sfecha = fecha.getText().toString();
+        sidentificacion = identificacion.getText().toString();
+        splaca = placa.getText().toString();
+        gotoguardar(scodigo, sfecha, sidentificacion, splaca);
+    }
+
+    public void consultar(View view){
+        String scodigo = codigo.getText().toString();
+        gotoconsultar(scodigo);
+    }
+
+    private void gotoconsultar(String scodigo) {
+         if (scodigo.isEmpty()){
+             Toast.makeText(this, "Codigo requerido", Toast.LENGTH_SHORT).show();
+             codigo.requestFocus();
+         }else {
+             Conexion_concesionario admin = new Conexion_concesionario(this, "concesionario5.bd", null, 1);
+             SQLiteDatabase db=admin.getReadableDatabase();
+             Cursor fila=db.rawQuery("select * from TblFactura where codFactura='" + scodigo + "'",null);
+             if (fila.moveToNext()){
+                 sw=1;
+                 fecha.setText(fila.getString(1));
+                 identificacion.setText(fila.getString(2));
+                 placa.setText(fila.getString(3));
+             } else {
+                 Toast.makeText(this, "Factura no hallada", Toast.LENGTH_SHORT).show();
+             }
+             db.close();
+         }
+    }
+
+    private void gotoguardar(String scodigo, String sfecha, String sidentificacion, String splaca) {
+        if (scodigo.isEmpty() || sfecha.isEmpty() || sidentificacion.isEmpty() || splaca.isEmpty()) {
+            Toast.makeText(this, "Todos los datos son requeridos", Toast.LENGTH_SHORT).show();
+            codigo.requestFocus();
+        } else {
+            Conexion_concesionario admin = new Conexion_concesionario(this, "concesionario5.bd", null, 1);
+            SQLiteDatabase db = admin.getWritableDatabase();
+            try {
+                SQLiteDatabase dbsearch = admin.getWritableDatabase();
+                String sql1 = "select Identificacion from TblCliente where Identificacion = '" + sidentificacion;
+                Cursor cursorcliente = dbsearch.rawQuery(sql1, null);
+                if (cursorcliente.moveToFirst()){
+                    String sql2 = "select placa from TblVehiculo where placa = '" + splaca + "'and activo = 0";
+                    Cursor cursorplaca = dbsearch.rawQuery(sql2, null);
+                    if (cursorplaca.moveToFirst()){
+                        SQLiteDatabase db2 = admin.getWritableDatabase();
+                        ContentValues guarda = new ContentValues();
+                        guarda.put("codFactura",scodigo);
+                        guarda.put("fecha",sfecha);
+                        guarda.put("Identificacion",sidentificacion);
+                        guarda.put("placa",splaca);
+                        guarda.put("activo",1);
+                        if (sw==0)
+                            resp= db2.insert("TblFactura",null,guarda);
+                       else {
+                           sw=0;
+                           resp=db2.update("TblFactura",guarda,"codFactura='" + scodigo +"'", null);
+                        }
+                       if (resp > 0){
+                           Toast.makeText(getApplicationContext(), "La factura se ha agregado correctamente ...", Toast.LENGTH_SHORT).show();
+                       }
+                       else {
+                           Toast.makeText(getApplicationContext(), "Error guardando factura", Toast.LENGTH_SHORT).show();
+                       }
+                        db2.close();
+
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Error, la placa no existe o no esta disponible", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), "Error, la identificacion no existe", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+    public void limpiar(){
+        sw=0;
+        codigo.setText("");
+        fecha.setText("");
+        identificacion.setText("");
+        placa.setText("");
+        codigo.requestFocus();
+    }
+    public void regresar(View view){
+        Intent menu = new Intent(this,MenuActivity.class);
+        startActivity(menu);
+    }
+    public void cancelar(View view){limpiar();}
+
+}
