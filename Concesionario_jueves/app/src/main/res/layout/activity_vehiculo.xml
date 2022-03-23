@@ -174,24 +174,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
-        <Button
-            android:id="@+id/btguardar"
+        <EditText
+            android:id="@+id/etdisponible"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="Guardar"
-            android:textSize="25dp"
-            android:text="Guardar" />
-
-        <Button
-            android:id="@+id/btconsultar"
-            android:layout_width="wrap_content"
-            android:layout_height="65dp"
-            android:layout_weight="1"
-            android:onClick="Consulta_vehiculo"
-            android:textSize="25dp"
-            android:text="Consultar"
-            tools:ignore="OnClick" />
+            android:ems="10"
+            android:gravity="center"
+            android:textSize="35dp"
+            android:hint="Disponibilidad"
+            android:inputType="number" />
     </LinearLayout>
 
     <LinearLayout
@@ -209,24 +201,27 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
 
         <Button
-            android:id="@+id/btanular"
+            android:id="@+id/btguardar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="AnularVehiculo"
-            android:textSize="25dp"
-            android:text="Anular" />
+            android:onClick="Guardar"
+            android:text="Guardar"
+            android:textSize="25dp" />
 
         <Button
-            android:id="@+id/btcancelar"
+            android:id="@+id/btconsultar"
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_weight="1"
-            android:text="Cancelar"
-            android:textSize="25dp" />
+            android:onClick="Consulta_vehiculo"
+            android:text="Consultar"
+            android:textSize="25dp"
+            tools:ignore="OnClick" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout21"
         android:layout_width="409dp"
         android:layout_height="70dp"
         android:layout_marginStart="1dp"
@@ -240,13 +235,44 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
 
         <Button
+            android:id="@+id/btanular"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="AnularVehiculo"
+            android:text="Anular"
+            android:textSize="25dp" />
+
+        <Button
+            android:id="@+id/btcancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_weight="1"
+            android:text="Cancelar"
+            android:textSize="25dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout21">
+
+        <Button
             android:id="@+id/btregresar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="Regresar"
-            android:textSize="25dp"
-            android:text="Regresar" />
+            android:text="Regresar"
+            android:textSize="25dp" />
     </LinearLayout>
 
 

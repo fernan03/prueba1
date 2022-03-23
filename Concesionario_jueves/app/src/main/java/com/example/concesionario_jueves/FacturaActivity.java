@@ -74,11 +74,11 @@ public class FacturaActivity extends AppCompatActivity {
             Conexion_concesionario admin = new Conexion_concesionario(this, "concesionario5.bd", null, 1);
             SQLiteDatabase db = admin.getWritableDatabase();
             try {
-                SQLiteDatabase dbsearch = admin.getWritableDatabase();
-                String sql1 = "select Identificacion from TblCliente where Identificacion = '" + sidentificacion;
+                SQLiteDatabase dbsearch = admin.getReadableDatabase();
+                String sql1 = "select Identificacion from TblCliente where Identificacion = '" + sidentificacion+"'";
                 Cursor cursorcliente = dbsearch.rawQuery(sql1, null);
                 if (cursorcliente.moveToFirst()){
-                    String sql2 = "select placa from TblVehiculo where placa = '" + splaca + "'and activo = 0";
+                    String sql2 = "select placa from TblVehiculo where placa = '" + splaca + "'and activo = 0  ";
                     Cursor cursorplaca = dbsearch.rawQuery(sql2, null);
                     if (cursorplaca.moveToFirst()){
                         SQLiteDatabase db2 = admin.getWritableDatabase();
@@ -88,6 +88,7 @@ public class FacturaActivity extends AppCompatActivity {
                         guarda.put("Identificacion",sidentificacion);
                         guarda.put("placa",splaca);
                         guarda.put("activo",1);
+
                         if (sw==0)
                             resp= db2.insert("TblFactura",null,guarda);
                        else {

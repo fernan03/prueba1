@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class VehiculoActivity extends AppCompatActivity {
 
-    EditText jetplaca, jetmarca, jetmodelo, jetcosto, jetcolor;
+    EditText jetplaca, jetmarca, jetmodelo, jetcosto, jetcolor,jetdisponible;
     Button jbtguardar, jbtconsultar, jbtanular, jbtingresar, jbtcancelar, jbtregresar;
     long resp, sw;
     String placa;
@@ -30,6 +30,7 @@ public class VehiculoActivity extends AppCompatActivity {
         jetmodelo = findViewById(R.id.etmodelo);
         jetcosto = findViewById(R.id.etcosto);
         jetcolor = findViewById(R.id.etcolor);
+        jetdisponible = findViewById(R.id.etdisponible);
 
         jbtguardar = findViewById(R.id.btguardar);
         jbtanular = findViewById(R.id.btanular);
@@ -40,14 +41,15 @@ public class VehiculoActivity extends AppCompatActivity {
     }
 
     public void Guardar(View view) {
-        String marca, modelo, color, costo;
+        String marca, modelo, color, costo,disponible;
         placa = jetplaca.getText().toString();
         marca = jetmarca.getText().toString();
         modelo = jetmodelo.getText().toString();
         color = jetcolor.getText().toString();
         costo = jetcosto.getText().toString();
+        disponible = jetdisponible.getText().toString();
 
-        if (placa.isEmpty() || marca.isEmpty() || modelo.isEmpty() || color.isEmpty() || costo.isEmpty()) {
+        if (placa.isEmpty() || marca.isEmpty() || modelo.isEmpty() || color.isEmpty() || costo.isEmpty() || disponible.isEmpty()) {
             Toast.makeText(this, "Todos los datos son requeridos", Toast.LENGTH_SHORT).show();
             jetplaca.requestFocus();
         } else {
@@ -59,6 +61,7 @@ public class VehiculoActivity extends AppCompatActivity {
             registro.put("modelo", modelo);
             registro.put("color", color);
             registro.put("costo", costo);
+            registro.put("activo",disponible);
             ConsultarVehiculo();
             if (sw == 1) {
                 sw = 0;
@@ -97,6 +100,7 @@ public class VehiculoActivity extends AppCompatActivity {
                 jetmodelo.setText(fila.getString(2));
                 jetcolor.setText(fila.getString(3));
                 jetcosto.setText(fila.getString(4));
+                jetdisponible.setText(fila.getString(5));
             } else {
 
             }
@@ -111,7 +115,7 @@ public class VehiculoActivity extends AppCompatActivity {
             SQLiteDatabase db = admin.getWritableDatabase();
             ContentValues registro = new ContentValues();
             registro.put("placa", placa);
-            registro.put("activo", "no");
+            registro.put("activo", 1);
             resp = db.update("TblVehiculo", registro, "placa='" + placa + "'", null);
             if (resp > 0) {
                 Toast.makeText(this, "Registro Anulado", Toast.LENGTH_SHORT).show();
@@ -131,6 +135,7 @@ public class VehiculoActivity extends AppCompatActivity {
         jetcosto.setText("");
         jetmarca.setText("");
         jetmodelo.setText("");
+        jetdisponible.setText("");
         jetplaca.requestFocus();
     }
 
