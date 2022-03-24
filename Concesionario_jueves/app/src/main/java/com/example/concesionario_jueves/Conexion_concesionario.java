@@ -19,7 +19,7 @@ public class Conexion_concesionario extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE TblVehiculo(placa text primary key," +
                 "marca text not null, modelo text not null, color text not null,costo text not null ,activo text not null default 0)");
         sqLiteDatabase.execSQL("CREATE TABLE TblFactura(codFactura text primary key," +
-                "fecha text not null, identificacion text not null, placa text not null,activo text not null default 'si', " +
+                "fecha text not null, identificacion text not null, placa text not null,activo text not null default 0, " +
                 "constraint pkFctura foreign key (identificacion) references TblCliente(Identificacion)," +
                 " foreign key (placa) references TblVehiculo(placa) )");
     }
